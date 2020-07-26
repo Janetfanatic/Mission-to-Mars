@@ -65,7 +65,8 @@ def featured_image(browser):
 
     # Find the more info button and click that
     browser.is_element_present_by_text('more info', wait_time=1)
-    more_info_elem = browser.links.find_by_partial_text('more info')
+    # more_info_elem = browser.links.find_by_partial_text('more info')
+    more_info_elem = browser.find_link_by_partial_text('more info')
     more_info_elem.click()
 
     # Parse the resulting html with soup
@@ -86,21 +87,15 @@ def featured_image(browser):
     return img_url
 
 def mars_facts():
-    #  Add try/except for error handling
     try:
-        # Turn link (table) into DataFrame, name columns, and set first column as index
-        df = pd.read_html('http://space-facts.com/mars/')[0]
-
+        df = pd.read_html("http://space-facts.com/mars/")[0]
     except BaseException:
         return None
-    
-    #  Assign columns and set index of dataframe
-    df.columns=['Description', 'Mars']
-    df.set_index('Description', inplace=True)
-
-
-    # Turn DataFrame back to link
+    df.columns = ["description", "value"]
+    df.set_index("description", inplace=True)
+    # Add some bootstrap styling to <table>
     return df.to_html(classes="table table-striped")
+
 
 if __name__ == "__main__":
     # If running as script, print scraped data
